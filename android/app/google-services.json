@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "268581938197",
+    "firebase_url": "https://smarthomefb-b67cb-default-rtdb.firebaseio.com",
+    "project_id": "smarthomefb-b67cb",
+    "storage_bucket": "smarthomefb-b67cb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:268581938197:android:969fcb394fe7af9af5da1c",
+        "android_client_info": {
+          "package_name": "com.example.firebase_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "268581938197-57ot17ruc68agmef55q4ga8og723de6j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.firebase_project",
+            "certificate_hash": "e6cc7c21eeb6d2aad0dc6298d680facc77cec200"
+          }
+        },
+        {
+          "client_id": "268581938197-sja8sopa218vkg0fbja0mcpt134gedfu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1u6axJ_4r-XqNG9rEitaoPlf2CYZlUuA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "268581938197-sja8sopa218vkg0fbja0mcpt134gedfu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
