@@ -1,64 +1,139 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-//import 'package:must_smart_home/Data.dart';
 
-//import 'Data.dart';
-
-// ignore: must_be_immutable
-// ignore: camel_case_types
-// ignore: must_be_immutable
 class bathroom extends StatefulWidget {
-  //var bathroomdata = myData[0]['devices'];
   @override
   _bathroomState createState() => _bathroomState();
 }
 
-// ignore: camel_case_types
 class _bathroomState extends State<bathroom> {
+  bool led = false;
+  bool WashingMachine = false;
+  bool heater = false;
+  String smoke = '';
+  @override
+  void initState() {
+    super.initState();
+    getsmokeValue();
+  }
+
+  getsmokeValue() async {
+    var sensorData = await FirebaseFirestore.instance
+        .collection('sensors')
+        .doc('sensor3')
+        .get();
+    var getsmokeValue = sensorData.data()?['smoke'];
+    smoke = getsmokeValue.toString();
+    setState(() {});
+  }
+
+  void _handleSwitch(bool value, String deviceName) {
+    if (deviceName == 'led') {
+      setState(() {
+        led = value;
+      });
+    } else if (deviceName == 'WashingMachine') {
+      setState(() {
+        WashingMachine = value;
+      });
+    } else if (deviceName == 'heater') {
+      setState(() {
+        heater = value;
+      });
+    }
+
+    FirebaseFirestore.instance
+        .collection('rooms')
+        .doc('bathroom')
+        .update({deviceName: value});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Colors.white38,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/w4.jpg"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        // decoration:
+        //     BoxDecoration(shape: BoxShape.rectangle, color: Colors.blue[50]),
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Text('smoke sensor : ',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 40.0,
+                      color: Colors.white,
+                    )),
+                Text(
+                  smoke,
+                  style: TextStyle(color: Colors.deepOrange, fontSize: 35.0),
+                )
+              ]),
+              Padding(
+                padding: const EdgeInsets.only(top: 30.0, bottom: 40.0),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     'led',
-                    style: TextStyle(fontSize: 28),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 35.0,
+                      color: Colors.white,
+                    ),
                   ),
                   Switch(
-                    value: true,
-                    onChanged: (value) => print('ggggggg'),
+                    value: led,
+                    onChanged: (value) => _handleSwitch(value, 'led'),
                   )
                 ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 35.0, bottom: 15.0),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Heater',
-                    style: TextStyle(fontSize: 28),
+                    'heater',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30.0,
+                      color: Colors.white,
+                    ),
                   ),
                   Switch(
-                    value: true,
-                    onChanged: (value) => print('ggggggg'),
+                    value: heater,
+                    onChanged: (value) => _handleSwitch(value, 'heater'),
                   )
                 ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 35.0, bottom: 15.0),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '5v',
-                    style: TextStyle(fontSize: 28),
+                    'WashingMachine',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 30.0,
+                      color: Colors.white,
+                    ),
                   ),
                   Switch(
-                    value: true,
-                    onChanged: (value) => print('ggggggg'),
+                    value: WashingMachine,
+                    onChanged: (value) =>
+                        _handleSwitch(value, 'WashingMachine'),
                   )
                 ],
               )

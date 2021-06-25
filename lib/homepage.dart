@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_project/Kitchen.dart';
 import 'package:firebase_project/bathroom.dart';
+import 'package:firebase_project/loginpage.dart';
 import 'package:firebase_project/room1.dart';
 import 'package:firebase_project/room2.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) => DefaultTabController(
-        length: 4,
+        length: 5,
         child: Scaffold(
             appBar: AppBar(
               brightness: Brightness.dark,
@@ -32,8 +33,8 @@ class _HomeState extends State<Home> {
               ),
               flexibleSpace: Container(
                   decoration: BoxDecoration(
-                    //  color: Colors.blueGrey,
                     color: Colors.blue,
+                    //    color: Colors.grey[160],
                   ),
                   width: double.infinity),
               bottom: TabBar(
@@ -42,6 +43,7 @@ class _HomeState extends State<Home> {
                 unselectedLabelColor: Colors.black,
                 isScrollable: true,
                 tabs: [
+                  Tab(icon: Icon(Icons.home_work_outlined), text: "Home"),
                   Tab(
                     icon: Icon(Icons.home),
                     text: "ROOM1",
@@ -54,6 +56,7 @@ class _HomeState extends State<Home> {
             ),
             body: TabBarView(
               children: [
+                loginpage(),
                 Room1(),
                 Room2(),
                 Kitchen(),
