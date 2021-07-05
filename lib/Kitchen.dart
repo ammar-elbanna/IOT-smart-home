@@ -21,13 +21,15 @@ class _KitchenState extends State<Kitchen> {
   }
 
   getsmokeValue() async {
-    var sensorData = await FirebaseFirestore.instance
-        .collection('sensors')
-        .doc('sensor3')
-        .get();
-    var pirValue = sensorData.data()?['smoke'];
-    smoke = pirValue.toString();
-    setState(() {});
+    final databaseRef = FirebaseDatabase.instance.reference();
+    databaseRef
+        .child('kitchen')
+        .child('smoke')
+        .once()
+        .then((DataSnapshot snapshot) {
+      smoke = snapshot.value.toString();
+      setState(() {});
+    });
   }
 
   void _handleSwitch(bool value, String deviceName) {
@@ -44,11 +46,9 @@ class _KitchenState extends State<Kitchen> {
         fridge = value;
       });
     }
-
-    FirebaseFirestore.instance
-        .collection('rooms')
-        .doc('kitchen')
-        .update({deviceName: value});
+    final databaseRef =
+        FirebaseDatabase.instance.reference(); //database reference object
+    databaseRef.child("kitchen").update({deviceName: value});
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class Room1 extends StatefulWidget {
@@ -18,13 +19,15 @@ class _Room1State extends State<Room1> {
   }
 
   getPirValue() async {
-    var sensorData = await FirebaseFirestore.instance
-        .collection('sensors')
-        .doc('sensor1')
-        .get();
-    var pirValue = sensorData.data()?['pir'];
-    pir = pirValue.toString();
-    setState(() {});
+    final databaseRef = FirebaseDatabase.instance.reference();
+    databaseRef
+        .child('room1')
+        .child('pir')
+        .once()
+        .then((DataSnapshot snapshot) {
+      pir = snapshot.value.toString();
+      setState(() {});
+    });
   }
 
   void _handleSwitch(bool value, String deviceName) {
@@ -41,11 +44,9 @@ class _Room1State extends State<Room1> {
         fan = value;
       });
     }
-
-    FirebaseFirestore.instance
-        .collection('rooms')
-        .doc('room1')
-        .update({deviceName: value});
+    final databaseRef =
+        FirebaseDatabase.instance.reference(); //database reference object
+    databaseRef.child("room1").update({deviceName: value});
   }
 
   @override

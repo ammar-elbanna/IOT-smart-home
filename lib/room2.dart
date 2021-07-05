@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
 class Room2 extends StatefulWidget {
@@ -18,13 +19,15 @@ class _Room2State extends State<Room2> {
   }
 
   tempValue() async {
-    var sensorData = await FirebaseFirestore.instance
-        .collection('sensors')
-        .doc('sensor2')
-        .get();
-    var tempValue = sensorData.data()?['temp'];
-    temp = tempValue.toString();
-    setState(() {});
+    final databaseRef = FirebaseDatabase.instance.reference();
+    databaseRef
+        .child('room2')
+        .child('temperature')
+        .once()
+        .then((DataSnapshot snapshot) {
+      temp = snapshot.value.toString();
+      setState(() {});
+    });
   }
 
   void _handleSwitch(bool value, String deviceName) {
@@ -42,10 +45,9 @@ class _Room2State extends State<Room2> {
       });
     }
 
-    FirebaseFirestore.instance
-        .collection('rooms')
-        .doc('room2')
-        .update({deviceName: value});
+    final databaseRef =
+        FirebaseDatabase.instance.reference(); //database reference object
+    databaseRef.child("room2").update({deviceName: value});
   }
 
   @override
@@ -97,23 +99,6 @@ class _Room2State extends State<Room2> {
               Padding(
                 padding: const EdgeInsets.only(top: 35.0, bottom: 15.0),
               ),
-              // Row(
-              //   children: [
-              //     LiteRollingSwitch(
-              //       //initial value
-
-              //       value: true,
-              //       textOn: 'disponible',
-              //       textOff: 'ocupado',
-              //       colorOn: Colors.greenAccent[700],
-              //       colorOff: Colors.redAccent[700],
-              //       iconOn: Icons.done,
-              //       iconOff: Icons.remove_circle_outline,
-              //       textSize: 16.0,
-              //       onChanged: (value) => _handleSwitch(value, 'led'),
-              //     ),
-              //   ],
-              // ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
