@@ -12,12 +12,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  //DatabaseReference _database =
-  //  FirebaseDatabase.instance.reference().child("test");
-  sendData() {
-    //_database.set('name');
-  }
-
   @override
   Widget build(BuildContext context) => DefaultTabController(
         length: 5,
@@ -27,10 +21,6 @@ class _HomeState extends State<Home> {
               iconTheme: IconThemeData(color: Colors.white),
               title: Text("Smart home"),
               centerTitle: true,
-              leading: IconButton(
-                icon: Icon(Icons.menu),
-                onPressed: () => sendData(),
-              ),
               flexibleSpace: Container(
                   decoration: BoxDecoration(
                     color: Colors.blue,
@@ -57,6 +47,7 @@ class _HomeState extends State<Home> {
             body: TabBarView(
               children: [
                 loginpage(),
+
                 Room1(),
                 Room2(),
                 Kitchen(),

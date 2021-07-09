@@ -17,17 +17,16 @@ class _KitchenState extends State<Kitchen> {
   @override
   void initState() {
     super.initState();
-    getsmokeValue();
+    getInitialValues();
   }
 
-  getsmokeValue() async {
+  getInitialValues() async {
     final databaseRef = FirebaseDatabase.instance.reference();
-    databaseRef
-        .child('kitchen')
-        .child('smoke')
-        .once()
-        .then((DataSnapshot snapshot) {
-      smoke = snapshot.value.toString();
+    databaseRef.child('kitchen').once().then((DataSnapshot snapshot) {
+      smoke = snapshot.value['smoke'].toString();
+      led = snapshot.value['led'] == 1 ? true : false;
+      microwave = snapshot.value['microwave'] == 1 ? true : false;
+      fridge = snapshot.value['fridge'] == 1 ? true : false;
       setState(() {});
     });
   }
@@ -46,9 +45,15 @@ class _KitchenState extends State<Kitchen> {
         fridge = value;
       });
     }
+    int fbvalue;
+    if (value == true) {
+      fbvalue = 1;
+    } else {
+      fbvalue = 0;
+    }
     final databaseRef =
         FirebaseDatabase.instance.reference(); //database reference object
-    databaseRef.child("kitchen").update({deviceName: value});
+    databaseRef.child("kitchen").update({deviceName: fbvalue});
   }
 
   @override

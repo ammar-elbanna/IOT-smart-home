@@ -15,17 +15,16 @@ class _Room2State extends State<Room2> {
   @override
   void initState() {
     super.initState();
-    tempValue();
+    getInitialValues();
   }
 
-  tempValue() async {
+  getInitialValues() async {
     final databaseRef = FirebaseDatabase.instance.reference();
-    databaseRef
-        .child('room2')
-        .child('temperature')
-        .once()
-        .then((DataSnapshot snapshot) {
-      temp = snapshot.value.toString();
+    databaseRef.child('room2').once().then((DataSnapshot snapshot) {
+      temp = snapshot.value['temperature'].toString();
+      led = snapshot.value['led'] == 1 ? true : false;
+      Radio = snapshot.value['Radio'] == 1 ? true : false;
+      PC = snapshot.value['PC'] == 1 ? true : false;
       setState(() {});
     });
   }
@@ -45,9 +44,15 @@ class _Room2State extends State<Room2> {
       });
     }
 
+    int fbvalue;
+    if (value == true) {
+      fbvalue = 1;
+    } else {
+      fbvalue = 0;
+    }
     final databaseRef =
         FirebaseDatabase.instance.reference(); //database reference object
-    databaseRef.child("room2").update({deviceName: value});
+    databaseRef.child("room2").update({deviceName: fbvalue});
   }
 
   @override

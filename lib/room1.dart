@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -12,20 +14,21 @@ class _Room1State extends State<Room1> {
   bool charger = false;
   bool fan = false;
   String pir = '';
+  var fbvalue = 0;
   @override
   void initState() {
     super.initState();
-    getPirValue();
+    getInitialValues();
   }
 
-  getPirValue() async {
+  getInitialValues() async {
     final databaseRef = FirebaseDatabase.instance.reference();
-    databaseRef
-        .child('room1')
-        .child('pir')
-        .once()
-        .then((DataSnapshot snapshot) {
-      pir = snapshot.value.toString();
+    databaseRef.child('room1').once().then((DataSnapshot snapshot) {
+      inspect(snapshot.value);
+      pir = snapshot.value['pir'].toString();
+      fan = snapshot.value['fan'] == 1 ? true : false;
+      charger = snapshot.value['charger'] == 1 ? true : false;
+      led = snapshot.value['led'] == 1 ? true : false;
       setState(() {});
     });
   }
@@ -44,9 +47,17 @@ class _Room1State extends State<Room1> {
         fan = value;
       });
     }
-    final databaseRef =
-        FirebaseDatabase.instance.reference(); //database reference object
-    databaseRef.child("room1").update({deviceName: value});
+
+    int fbvalue;
+    if (value == true) {
+      fbvalue = 1;
+    } else {
+      fbvalue = 0;
+    }
+    final databaseRef = FirebaseDatabase.instance.reference();
+    //database reference object
+
+    databaseRef.child("room1").update({deviceName: fbvalue});
   }
 
   @override

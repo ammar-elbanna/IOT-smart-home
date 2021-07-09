@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 
@@ -15,17 +14,16 @@ class _bathroomState extends State<bathroom> {
   @override
   void initState() {
     super.initState();
-    getsmokeValue();
+    getInitialValue();
   }
 
-  getsmokeValue() async {
+  getInitialValue() async {
     final databaseRef = FirebaseDatabase.instance.reference();
-    databaseRef
-        .child('bathroom')
-        .child('smoke')
-        .once()
-        .then((DataSnapshot snapshot) {
-      smoke = snapshot.value.toString();
+    databaseRef.child('bathroom').once().then((DataSnapshot snapshot) {
+      smoke = snapshot.value['smoke'].toString();
+      led = snapshot.value['led'] == 1 ? true : false;
+      WashingMachine = snapshot.value['WashingMachine'] == 1 ? true : false;
+      heater = snapshot.value['heater'] == 1 ? true : false;
       setState(() {});
     });
   }
@@ -44,9 +42,15 @@ class _bathroomState extends State<bathroom> {
         heater = value;
       });
     }
+    int fbvalue;
+    if (value == true) {
+      fbvalue = 1;
+    } else {
+      fbvalue = 0;
+    }
     final databaseRef =
         FirebaseDatabase.instance.reference(); //database reference object
-    databaseRef.child("bathroom").update({deviceName: value});
+    databaseRef.child("bathroom").update({deviceName: fbvalue});
   }
 
   @override

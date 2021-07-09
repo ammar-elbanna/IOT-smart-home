@@ -50,7 +50,6 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-  - assets/images/w1.jpg
   - assets/images/w2.jpg
   - assets/images/w5.png
   - assets/images/w4.jpg
